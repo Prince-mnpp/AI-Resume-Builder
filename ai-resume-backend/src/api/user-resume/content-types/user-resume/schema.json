@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_resumes",
+  "info": {
+    "singularName": "user-resume",
+    "pluralName": "user-resumes",
+    "displayName": "userResume"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true
+    },
+    "resumeID": {
+      "type": "string",
+      "required": true
+    },
+    "userEmail": {
+      "type": "email",
+      "required": true
+    },
+    "userName": {
+      "type": "string"
+    }
+  }
+}
