@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import FormSection from '../../components/FormSection';
-import ResumeCardItem from '@/dashboard/components/ResumeCardItem';
 import { ResumeInfoContext } from '@/context/ResumeInfoContext';
 import dummy from '@/data/dummy';
+import ResumePreview from '../../components/ResumePreview';
 
 const EditResume = () => {
   const params = useParams();
@@ -22,7 +22,7 @@ const EditResume = () => {
       {/* Form section */}
         <FormSection />
       {/* Preview Section */}
-        <ResumeCardItem />
+        <ResumePreview />
     </div>
     </ResumeInfoContext.Provider>
     
