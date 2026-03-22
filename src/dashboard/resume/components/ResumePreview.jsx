@@ -4,6 +4,7 @@ import PersonalDetailPreview from './preview/PersonalDetailPreview';
 import SummeryPreview from './preview/SummeryPreview';
 import ExperiencePreview from './preview/ExperiencePreview';
 import EducationalPreview from './preview/EducationalPreview';
+import SkillsPreview from './preview/SkillsPreview';
 
 const ResumePreview = () => {
 
@@ -23,6 +24,7 @@ const ResumePreview = () => {
       {/* education */}
         <EducationalPreview resumeInfo={resumeInfo}/>
       {/* skills */}
+        <SkillsPreview resumeInfo={resumeInfo}/>
     </div>
   )
 }
