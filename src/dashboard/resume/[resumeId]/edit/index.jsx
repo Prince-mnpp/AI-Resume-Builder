@@ -1,32 +1,37 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import FormSection from '../../components/FormSection';
 import { ResumeInfoContext } from '@/context/ResumeInfoContext';
-import dummy from '@/data/dummy';
 import ResumePreview from '../../components/ResumePreview';
+import GlobalApi from "../../../../service/GlobalApi";
 
 const EditResume = () => {
   const params = useParams();
-  const [resumeInfo, setResumeInfo] = useState();
+  const [resumeInfo, setResumeInfo] = useState(null);
 
   useEffect(() => {
-    setResumeInfo(dummy);
-  },[])
+    if (params.resumeId) {
+      GetResumeInfo();
+    }
+  }, [params.resumeId]);
 
-  useEffect(() => {
-    console.log(params.resumeId)
-  },[])
+  const GetResumeInfo = async () => {
+    try {
+      const data = await GlobalApi.GetResumeById(params.resumeId);
+      setResumeInfo(data);
+    } catch (error) {
+      console.log("GetResumeById error:", error);
+    }
+  };
+
   return (
-    <ResumeInfoContext.Provider value={{resumeInfo,setResumeInfo}}>
-      <div className='grid grid-cols-1 md:grid-cols-2 p-10 gap-10 '>
-      {/* Form section */}
+    <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
         <FormSection />
-      {/* Preview Section */}
         <ResumePreview />
-    </div>
+      </div>
     </ResumeInfoContext.Provider>
-    
-  )
-}
+  );
+};
 
-export default EditResume
+export default EditResume;

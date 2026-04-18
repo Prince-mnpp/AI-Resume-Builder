@@ -4,7 +4,7 @@ import { ResumeInfoContext } from '@/context/ResumeInfoContext'
 import { LoaderCircle } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import GlobalApi from './../../../../../service/GlobalApi';
+import GlobalApi from '../../../../service/GlobalApi';
 import { toast } from 'sonner';
 
 function PersonalDetail({enabledNext}) {
@@ -32,23 +32,28 @@ function PersonalDetail({enabledNext}) {
         })
     }
 
-    const onSave=(e)=>{
-        e.preventDefault();
-        setLoading(true)
-        const data={
-            data:formData
-        }
-        GlobalApi.UpdateResumeDetail(params?.resumeId,data).then(resp=>{
-            console.log(resp);
-            enabledNext(true);
-            setLoading(false);
-            toast("Details Updated")
-            
-        },(error)=>{
-            setLoading(false);
-        })
-        
-    }
+    const onSave = async (e) => {
+  e.preventDefault();
+  try {
+    setLoading(true);
+
+    await GlobalApi.UpdateResumeDetail(params?.resumeId, {
+      firstname: formData?.firstName,
+      lastname: formData?.lastName,
+      jobtitle: formData?.jobTitle,
+      address: formData?.address,
+      phone: formData?.phone,
+      email: formData?.email,
+    });
+
+    enabledNext(true);
+    setLoading(false);
+    toast("Details Updated");
+  } catch (error) {
+    console.log(error);
+    setLoading(false);
+  }
+};
   return (
     <div className='p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10'>
         <h2 className='font-bold text-lg'>Personal Detail</h2>

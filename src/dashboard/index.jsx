@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AddResume from './components/AddResume'
 import { useUser } from '@clerk/clerk-react'
-import GlobalApi from './../../service/GlobalApi'
+import GlobalApi from '@/service/GlobalApi'
 import ResumeCardItem from './components/ResumeCardItem'
 
 const Dashboard = () => {
@@ -14,29 +14,17 @@ const Dashboard = () => {
     }
   }, [user])
 
-  const GetResumesList = () => {
-    GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress)
-      .then((resp) => {
-        console.log('FULL API RESPONSE:', resp.data)
-        console.log('RESUME ARRAY:', resp?.data?.data)
+  const GetResumesList = async () => {
+  try {
+    const resumes = await GlobalApi.GetUserResumes(
+      user?.primaryEmailAddress?.emailAddress
+    );
 
-        // Strapi v5 style: fields are directly on item
-        const formattedResumes = resp?.data?.data?.map((item) => ({
-          id: item.id,
-          documentId: item.documentId,
-          title: item.title,
-          themeColor: item.themeColor,
-          ...item,
-        })) || []
-
-        console.log('FORMATTED RESUMES:', formattedResumes)
-        setResumeList(formattedResumes)
-      })
-      .catch((error) => {
-        console.log('GetUserResumes error:', error)
-      })
+    setResumeList(resumes || []);
+  } catch (error) {
+    console.log("GetUserResumes error:", error);
   }
-
+};
   return (
     <div className='p-10 md:px-20 lg:px-32'>
       <h2 className='font-bold text-3xl'>My Resume</h2>

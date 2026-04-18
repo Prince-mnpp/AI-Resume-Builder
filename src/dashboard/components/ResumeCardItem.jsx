@@ -17,7 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import GlobalApi from './../../../service/GlobalApi'
+import GlobalApi from '../../service/GlobalApi'
 
 function ResumeCardItem({ resume, refreshData }) {
   const navigation = useNavigate()
@@ -27,13 +27,13 @@ function ResumeCardItem({ resume, refreshData }) {
   const onDelete = () => {
     console.log('DELETE RESUME:', resume)
 
-    if (!resume?.documentId) {
+    if (!resume?.id) {
       return
     }
 
     setLoading(true)
 
-    GlobalApi.DeleteResumeById(resume.documentId)
+    GlobalApi.DeleteResumeById(resume.id)
       .then((resp) => {
         console.log('DELETE RESPONSE:', resp)
         refreshData()
@@ -49,7 +49,7 @@ function ResumeCardItem({ resume, refreshData }) {
 
   return (
     <div>
-      <Link to={`/dashboard/resume/${resume?.documentId}/edit`}>
+      <Link to={`/dashboard/resume/${resume?.id}/edit`}>
         <div
           className='p-14 bg-linear-to-b from-pink-100 via-purple-200 to-blue-200 h-[280px] rounded-t-lg border-t-4'
           style={{
@@ -80,7 +80,7 @@ function ResumeCardItem({ resume, refreshData }) {
           <DropdownMenuContent>
             <DropdownMenuItem
               onClick={() =>
-                navigation(`/dashboard/resume/${resume?.documentId}/edit`)
+                navigation(`/dashboard/resume/${resume?.id}/edit`)
               }
             >
               Edit
@@ -88,7 +88,7 @@ function ResumeCardItem({ resume, refreshData }) {
 
             <DropdownMenuItem
               onClick={() =>
-                navigation(`/my-resume/${resume?.documentId}/view`)
+                navigation(`/my-resume/${resume?.id}/view`)
               }
             >
               View
@@ -96,7 +96,7 @@ function ResumeCardItem({ resume, refreshData }) {
 
             <DropdownMenuItem
               onClick={() =>
-                navigation(`/my-resume/${resume?.documentId}/view`)
+                navigation(`/my-resume/${resume?.id}/view`)
               }
             >
               Download

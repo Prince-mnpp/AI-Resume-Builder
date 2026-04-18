@@ -12,6 +12,8 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.61.3",
     "@fontsource-variable/geist": "^5.2.8",
+    "@google/genai": "^1.50.1",
+    "@supabase/supabase-js": "^2.103.3",
     "@tailwindcss/vite": "^4.2.1",
     "axios": "^1.13.6",
     "class-variance-authority": "^0.7.1",

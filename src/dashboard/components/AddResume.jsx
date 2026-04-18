@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from 'uuid';
 
 import { useUser } from "@clerk/clerk-react";
-import GlobalApi from "./../../../service/GlobalApi";
+import GlobalApi from "../../service/GlobalApi";
 import { useNavigate } from "react-router-dom";
 
 const AddResume = () => {
@@ -23,28 +23,26 @@ const AddResume = () => {
   const [loading,setLoading] = useState(false);
   const navigation = useNavigate();
 
-  const onCreate = () => {
+  const onCreate = async () => {
+  try {
     setLoading(true);
-    const uuid = uuidv4();
-    const data = {
-      data:{
-        Title:resumeTitle,
-        resumeID:uuid,
-        userEmail:user?.primaryEmailAddress?.emailAddress,
-        userName:user?.fullName
-      }
-    }
-    GlobalApi.CreateResume(data).then(resp => {
-      console.log(resp.data.data.documentId);
-      if(resp){
-        setLoading(false);
-        navigation('/dashboard/resume/'+resp.data.data.documentId+"/edit")
-      }
 
-    },(error)=>{
-      setLoading(false);
-    })
+    const resume = await GlobalApi.CreateResume({
+      title: resumeTitle,
+      resume_id: uuidv4(),
+      user_email: user?.primaryEmailAddress?.emailAddress,
+      user_name: user?.fullName,
+      theme_color: "#7c3aed",
+    });
+
+    setLoading(false);
+    setOpenDialog(false);
+    navigation(`/dashboard/resume/${resume.id}/edit`);
+  } catch (error) {
+    console.log("Create resume error:", error);
+    setLoading(false);
   }
+};
   return (
     <div>
       <div className="p-14 py-24 border items-center flex justify-center bg-secondary rounded-lg h-70 hover:scale-105 transition-all hover:shadow-md cursor-pointer border-dashed"
