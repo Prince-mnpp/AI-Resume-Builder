@@ -6,15 +6,7 @@ const ai = new GoogleGenAI({
 
 export const generateSummaryFromAI = async (jobTitle) => {
   const prompt = `
-You are an expert resume writer.
-Write 3 professional resume summary options for the job title: "${jobTitle}".
-
-Rules:
-- Keep each summary between 2 and 4 lines
-- Make them ATS-friendly
-- Use strong professional language
-- Return only plain text
-- Number them as 1, 2, 3
+Job Title: ${jobTitle} , Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format
 `;
 
   const response = await ai.models.generateContent({
