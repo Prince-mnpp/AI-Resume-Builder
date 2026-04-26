@@ -10,7 +10,7 @@ Job Title: ${jobTitle} , Depends on job title give me list of  summery for 3 exp
 `;
 
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash",
     contents: prompt,
   });
 

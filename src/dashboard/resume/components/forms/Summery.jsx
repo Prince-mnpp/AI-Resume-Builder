@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ResumeInfoContext } from '@/context/ResumeInfoContext';
-import { LoaderCircle } from 'lucide-react';
+import { Brain, LoaderCircle } from 'lucide-react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -115,11 +115,16 @@ const Summery = ({ enabledNext }) => {
           type="button"
           onClick={GenerateSummaryFromAI}
           disabled={aiLoading}
+          variant='outline'
+          className='text-primary'
         >
           {aiLoading ? (
             <LoaderCircle className="animate-spin" />
           ) : (
-            'Generate from AI'
+            <>
+            <Brain className='h-4 w-4'/>
+            Generate from AI
+            </>
           )}
         </Button>
       </div>
