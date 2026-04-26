@@ -24,7 +24,6 @@ function ViewResume() {
         .eq("id", Number(resumeId))
         .single();
 
-      console.log("Resume ID:", resumeId);
       console.log("Resume data:", data);
       console.log("Supabase error:", error);
 
@@ -33,7 +32,15 @@ function ViewResume() {
         return;
       }
 
-      setResumeInfo(data);
+      const formattedData = {
+        ...data,
+        firstName: data.firstname,
+        lastName: data.lastname,
+        jobTitle: data.jobtitle,
+        themeColor: data.themeColor || data.theme_color || "#7c3aed",
+      };
+
+      setResumeInfo(formattedData);
     } catch (error) {
       console.log("Catch error:", error);
       setResumeInfo(null);
@@ -49,17 +56,21 @@ function ViewResume() {
   const HandleShare = async () => {
     const url = `${window.location.origin}/my-resume/${resumeId}/view`;
 
-    if (navigator.share) {
-      await navigator.share({
-        title: `${resumeInfo?.firstName || ""} ${
-          resumeInfo?.lastName || ""
-        } Resume`,
-        text: "Please check my resume.",
-        url,
-      });
-    } else {
-      await navigator.clipboard.writeText(url);
-      alert("Resume link copied!");
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: `${resumeInfo?.firstName || ""} ${
+            resumeInfo?.lastName || ""
+          } Resume`,
+          text: "Please check my resume.",
+          url,
+        });
+      } else {
+        await navigator.clipboard.writeText(url);
+        alert("Resume link copied!");
+      }
+    } catch (error) {
+      console.log("Share error:", error);
     }
   };
 
