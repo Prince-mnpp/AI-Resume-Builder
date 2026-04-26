@@ -60,32 +60,42 @@ function Experience() {
   }, [experienceList, setResumeInfo]);
 
   const onSave = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const cleanExperience = experienceList.map(({ id, ...rest }) => rest);
+    const cleanExperience = experienceList.map(({ id, ...rest }) => rest);
 
-      const { error } = await supabase
-        .from('user_resumes')
-        .update({
-          Experience: cleanExperience,
-        })
-        .eq('id', params?.resumeId);
+    console.log("Resume ID:", params?.resumeId);
+    console.log("Saving experience:", cleanExperience);
 
-      if (error) {
-        console.log('Save error:', error);
-        toast('Failed to save');
-        return;
-      }
+    const { data, error } = await supabase
+      .from("user_resumes")
+      .update({
+        experience: cleanExperience, // ✅ FIXED
+      })
+      .eq("id", Number(params?.resumeId)) // safer
+      .select();
 
-      toast('Details updated!');
-    } catch (error) {
-      console.log('Save error:', error);
-      toast('Failed to save');
-    } finally {
-      setLoading(false);
+    if (error) {
+      console.log("Save error:", error);
+      toast("Failed to save");
+      return;
     }
-  };
+
+    if (!data || data.length === 0) {
+      toast("No matching resume found");
+      return;
+    }
+
+    console.log("Updated:", data);
+    toast("Details updated!");
+  } catch (error) {
+    console.log("Catch error:", error);
+    toast("Failed to save");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div>

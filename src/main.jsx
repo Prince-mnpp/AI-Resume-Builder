@@ -8,29 +8,35 @@ import Home from './home/index.jsx'
 import Dashboard from './dashboard'
 import { ClerkProvider } from "@clerk/clerk-react";
 import EditResume from './dashboard/resume/[resumeId]/edit'
+import ViewResume from './my-resume/[resumeId]/view'
 
 const router = createBrowserRouter([
   {
-    element:<App />,
-    children:[
+    element: <App />,
+    children: [
       {
-        path:'/dashboard',
-        element:<Dashboard />
+        path: '/dashboard',
+        element: <Dashboard />
       },
       {
-        path:'/dashboard/resume/:resumeId/edit',
-        element:<EditResume />
+        path: '/dashboard/resume/:resumeId/edit',
+        element: <EditResume />
       }
+      
     ]
   },
   {
-    path:'/',
-    element:<Home />
-  },
-  
+        path: "/my-resume/:resumeId/view",
+        element: <ViewResume />
+      },
   {
-    path:'/auth/sign-in',
-    element:<SignInPage />
+    path: '/',
+    element: <Home />
+  },
+
+  {
+    path: '/auth/sign-in',
+    element: <SignInPage />
   }
 ])
 
@@ -39,7 +45,7 @@ const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <RouterProvider router = {router} />
+      <RouterProvider router={router} />
     </ClerkProvider>
   </StrictMode>
 )

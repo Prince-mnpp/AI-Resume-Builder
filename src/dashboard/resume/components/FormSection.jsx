@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import PersonalDetail from './forms/PersonalDetail'
-import { Link, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Home } from 'lucide-react';
 import Summery from './forms/Summery';
 import Experience from './forms/Experience';
 import Education from './forms/Education';
 import Skills from './forms/Skills';
+import ThemeColor from './ThemeColor';
 
 const FormSection = () => {
   const [activeFormIndex,setActiveFormIndex] = useState(1);
@@ -19,6 +20,7 @@ const FormSection = () => {
           <Link to={"/dashboard"}>
             <Button><Home /></Button>
           </Link>
+          <ThemeColor />
 
         </div>
         <div className='flex gap-2'>
@@ -40,7 +42,9 @@ const FormSection = () => {
        :activeFormIndex==2? <Summery enabledNext={(v)=>setEnableNext(v)}/> 
       : activeFormIndex==3? <Experience /> 
       : activeFormIndex==4? <Education />
-      : activeFormIndex==5 ? <Skills /> : null}
+      : activeFormIndex==5 ? <Skills /> 
+      : activeFormIndex==6?
+        <Navigate to={'/my-resume/'+resumeId+'/view'} /> : null }
       {/* Summary */}
 
       {/* Experience */}
