@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { ResumeInfoContext } from '@/context/ResumeInfoContext';
-import { Brain, LoaderCircle } from 'lucide-react';
-import React, { useContext, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { ResumeInfoContext } from "@/context/ResumeInfoContext";
+import { Brain, LoaderCircle } from "lucide-react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   BtnBold,
   BtnBulletList,
@@ -14,21 +14,27 @@ import {
   EditorProvider,
   Separator,
   Toolbar,
-} from 'react-simple-wysiwyg';
-import { generateSummaryFromAI } from '@/service/AIModal';
-import { toast } from 'sonner';
+} from "react-simple-wysiwyg";
+import { generateSummaryFromAI } from "@/service/AIModal";
+import { toast } from "sonner";
 
 const PROMPT =
-  'Position title: {positionTitle}. Based on this position title, give me 5-7 professional resume experience bullet points. Do not add experience level. Do not return JSON. Return only clean HTML bullet list using <ul><li></li></ul> tags.';
+  "Position title: {positionTitle}. Based on this position title, give me 5-7 professional resume experience bullet points. Do not add experience level. Do not return JSON. Return only clean HTML bullet list using <ul><li></li></ul> tags.";
 
 function RichTextEditor({ onRichTextEditorChange, index, defaultValue }) {
-  const [value, setValue] = useState(defaultValue || '');
+  const [value, setValue] = useState(defaultValue || "");
   const { resumeInfo } = useContext(ResumeInfoContext);
   const [loading, setLoading] = useState(false);
 
+  // 🔥 IMPORTANT: sync when value changes from parent
+  useEffect(() => {
+    setValue(defaultValue || "");
+  }, [defaultValue]);
+
   const GenerateSummeryFromAI = async () => {
-    if (!resumeInfo?.Experience?.[index]?.title) {
-      toast('Please Add Position Title');
+    // ✅ FIXED lowercase "experience"
+    if (!resumeInfo?.experience?.[index]?.title) {
+      toast("Please Add Position Title");
       return;
     }
 
@@ -36,27 +42,24 @@ function RichTextEditor({ onRichTextEditorChange, index, defaultValue }) {
       setLoading(true);
 
       const prompt = PROMPT.replace(
-        '{positionTitle}',
-        resumeInfo.Experience[index].title
+        "{positionTitle}",
+        resumeInfo.experience[index].title
       );
 
       const resp = await generateSummaryFromAI(prompt);
 
       const cleanResp = resp
-        ?.replace('[', '')
-        ?.replace(']', '')
+        ?.replace("[", "")
+        ?.replace("]", "")
         ?.trim();
 
       setValue(cleanResp);
 
-      onRichTextEditorChange({
-        target: {
-          value: cleanResp,
-        },
-      });
+      // ✅ FIX: send value directly (not event object)
+      onRichTextEditorChange(cleanResp);
     } catch (error) {
       console.log(error);
-      toast('Something went wrong while generating summary');
+      toast("Something went wrong while generating summary");
     } finally {
       setLoading(false);
     }
@@ -88,8 +91,11 @@ function RichTextEditor({ onRichTextEditorChange, index, defaultValue }) {
         <Editor
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
-            onRichTextEditorChange(e);
+            const newValue = e.target.value;
+            setValue(newValue);
+
+            // ✅ FIX: pass clean value
+            onRichTextEditorChange(newValue);
           }}
         >
           <Toolbar>

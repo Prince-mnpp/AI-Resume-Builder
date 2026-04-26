@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
   return (
@@ -18,7 +18,8 @@ function ExperiencePreview({ resumeInfo }) {
         }}
       />
 
-      {resumeInfo?.experience?.map((experience, index) => (
+      {/* IMPORTANT: fallback [] to avoid crash */}
+      {(resumeInfo?.experience || []).map((exp, index) => (
         <div key={index} className="my-5">
           <h2
             className="text-sm font-bold"
@@ -26,23 +27,33 @@ function ExperiencePreview({ resumeInfo }) {
               color: resumeInfo?.themeColor,
             }}
           >
-            {experience?.title}
+            {exp?.title || "Job Title"}
           </h2>
 
           <h2 className="text-xs flex justify-between">
-            {experience?.companyName}, {experience?.city}, {experience?.state}
+            {/* fallback values */}
+            {exp?.companyName || "Company"}, {exp?.city || "City"},{" "}
+            {exp?.state || "State"}
+
             <span>
-              {experience?.startDate} To{' '}
-              {experience?.currentlyWorking ? 'Present' : experience?.endDate}
+              {exp?.startDate || "Start"} -{" "}
+              {exp?.currentlyWorking ? "Present" : exp?.endDate || "End"}
             </span>
           </h2>
 
-          <div
-            className="text-xs my-2"
-            dangerouslySetInnerHTML={{
-              __html: experience?.workSummery || '',
-            }}
-          />
+          {/* safer rendering */}
+          {exp?.workSummery ? (
+            <div
+              className="text-xs my-2"
+              dangerouslySetInnerHTML={{
+                __html: exp.workSummery,
+              }}
+            />
+          ) : (
+            <p className="text-xs my-2 text-gray-400">
+              Description...
+            </p>
+          )}
         </div>
       ))}
     </div>
